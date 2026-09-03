@@ -2,8 +2,9 @@
   "name": "practica1-arquitectura-ingenieria-software",
   "version": "1.0.0",
   "description": "Practica de la materia Arquitectura y Diseño de Software relacionada al uso de APIs REST y GraphQL para un sistema de gestión escolar.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "src/node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,12 +12,18 @@
     "url": "git+https://github.com/Kashiseitos/Practica1-Arquitectura-Ingenieria-Software.git"
   },
   "keywords": [],
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Kashiseitos/Practica1-Arquitectura-Ingenieria-Software/issues"
   },
   "homepage": "https://github.com/Kashiseitos/Practica1-Arquitectura-Ingenieria-Software#readme",
   "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/express5": "^1.1.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "graphql": "^16.14.2",
     "mongoose": "^9.9.4"
   }
 }
