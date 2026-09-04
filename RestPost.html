@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REST API Explorer - Alumnos</title>
+  <style>
+    /* Tema inspirado en Apollo Studio */
+    :root {
+      --bg-dark: #0f172a;
+      --panel-bg: #1e293b;
+      --text-light: #f8fafc;
+      --text-muted: #94a3b8;
+      --apollo-blue: #38bdf8;
+      --apollo-blue-hover: #0ea5e9;
+      --border-color: #334155;
+      --success: #10b981;
+      --error: #ef4444;
+      --badge-post: #10b981;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 40px 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      align-items: stretch;
+    }
+    
+    .method-badge {
+      background-color: var(--badge-post);
+      color: #fff;
+      font-weight: 700;
+      padding: 0 16px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+    
+    input {
+      flex-grow: 1;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--apollo-blue);
+    }
+
+    button {
+      padding: 0 24px;
+      background: var(--apollo-blue);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--apollo-blue-hover);
+    }
+    
+    .body-group {
+      margin-bottom: 25px;
+    }
+
+    .body-group h3 {
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      color: #e2e8f0;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 15px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      resize: vertical;
+      outline: none;
+    }
+
+    .status {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 6px;
+      display: none; /* Oculto por defecto */
+    }
+    .status.show { display: block; }
+    .status.ok { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); }
+    .status.error { background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid var(--error); }
+
+    .response-section h3 {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    pre {
+      background: var(--bg-dark);
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid var(--apollo-blue);
+      color: var(--text-light);
+      font-size: 0.95rem;
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Registro de Alumnos (API REST)</h2>
+    
+    <div class="input-group">
+      <!-- Etiqueta fija en POST -->
+      <div class="method-badge">POST</div>
+      
+      <input type="text" id="apiUrl" value="http://localhost:4000/api/alumnos">
+      <button onclick="hacerPeticion()">Enviar Request</button>
+    </div>
+
+    <div class="body-group">
+      <h3>Cuerpo de la Petición (JSON)</h3>
+      <textarea id="requestBody" rows="12">{
+  "nombre": "Elena Torres",
+  "domicilio": "Av. Universidad 456, CDMX",
+  "idiomaNativo": "español",
+  "contacto": {
+    "email": "elena.torres@ejemplo.com",
+    "telefono": "5559876543"
+  },
+  "quienRecomendo": "Roberto Gómez",
+  "familiarInscrito": {
+    "tieneFamiliar": true,
+    "matriculaFamiliar": "MAT-2025-889"
+  },
+  "tarjetaPorDefecto": {
+    "numeroEnmascarado": "**** **** **** 4567",
+    "titular": "Elena Torres",
+    "expiracion": "08/29"
+  },
+  "nivelAsignado": 2,
+  "activo": true
+}</textarea>
+    </div>
+
+    <div id="statusIndicator" class="status"></div>
+    
+    <div class="response-section">
+      <h3>Respuesta del Servidor</h3>
+      <pre id="jsonOutput">Esperando petición...</pre>
+    </div>
+  </div>
+
+  <script>
+    async function hacerPeticion() {
+      const url = document.getElementById('apiUrl').value;
+      const jsonOutput = document.getElementById('jsonOutput');
+      const statusIndicator = document.getElementById('statusIndicator');
+      const bodyData = document.getElementById('requestBody').value;
+
+      jsonOutput.textContent = "Procesando...";
+      statusIndicator.className = "status show";
+      statusIndicator.textContent = "";
+
+      // 1. Validar que el JSON esté bien estructurado antes de enviar
+      if (bodyData.trim() === '') {
+        statusIndicator.textContent = "Error: El cuerpo de la petición está vacío.";
+        statusIndicator.classList.add('error');
+        jsonOutput.textContent = "Por favor, ingresa los datos del alumno en formato JSON.";
+        return;
+      }
+
+      try {
+        JSON.parse(bodyData);
+      } catch (e) {
+        statusIndicator.textContent = "Error de Sintaxis (400 Bad Request)";
+        statusIndicator.classList.add('error');
+        jsonOutput.textContent = "El JSON tiene errores. Revisa que todas las llaves y comillas estén cerradas correctamente.";
+        return;
+      }
+
+      // 2. Realizar la petición POST
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: bodyData
+        });
+        
+        // 3. Manejar el código de estado visualmente
+        statusIndicator.textContent = `Status: ${response.status} ${response.statusText}`;
+        if (response.ok) {
+          statusIndicator.classList.add('ok');
+        } else {
+          statusIndicator.classList.add('error');
+        }
+
+        // 4. Mostrar la respuesta
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            jsonOutput.textContent = JSON.stringify(data, null, 2);
+        } else {
+            const textData = await response.text();
+            jsonOutput.textContent = textData;
+        }
+
+      } catch (error) {
+        statusIndicator.textContent = "Error de Conexión";
+        statusIndicator.classList.add('error');
+        jsonOutput.textContent = `No se pudo conectar con ${url}\n\nDetalle: ${error.message}\n\nVerifica que el servidor (npm start) esté en ejecución.`;
+      }
+    }
+  </script>
+</body>
+</html>
